@@ -1,0 +1,52 @@
+{
+  "name": "warehouse-job-by-shady",
+  "extName": "Warehouse Jobs",
+  "tagline": "by shady",
+  "description": "This extension books amazon warehouse shift automatically.",
+  "private": true,
+  "version": "0.0.3",
+  "type": "module",
+  "scripts": {
+    "dev": "wxt",
+    "dev:firefox": "wxt -b firefox",
+    "build": "wxt build",
+    "build:firefox": "wxt build -b firefox",
+    "zip": "wxt zip",
+    "zip:firefox": "wxt zip -b firefox",
+    "compile": "tsc --noEmit",
+    "postinstall": "wxt prepare"
+  },
+  "dependencies": {
+    "@ant-design/cssinjs": "^1.23.0",
+    "@ant-design/v5-patch-for-react-19": "^1.0.3",
+    "@fontsource/poppins": "^5.2.6",
+    "@heroicons/react": "^2.2.0",
+    "@supabase/supabase-js": "^2.49.9",
+    "@tailwindcss/postcss": "^4.1.8",
+    "@tailwindcss/vite": "^4.1.5",
+    "@types/lodash": "^4.17.17",
+    "antd": "^5.25.4",
+    "arrive": "^2.5.2",
+    "clsx": "^2.1.1",
+    "lodash": "^4.17.21",
+    "prettier-plugin-organize-imports": "^4.1.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-router-dom": "^7.6.2",
+    "sweetalert2": "^11.22.0",
+    "tailwindcss": "^4.1.8",
+    "webext-bridge": "^6.0.1"
+  },
+  "devDependencies": {
+    "@types/arrive": "^2.4.4",
+    "@types/chrome": "^0.0.326",
+    "@types/react": "^19.1.6",
+    "@types/react-dom": "^19.1.5",
+    "@wxt-dev/auto-icons": "^1.0.2",
+    "@wxt-dev/module-react": "^1.1.3",
+    "prettier": "^3.5.3",
+    "prettier-plugin-tailwindcss": "^0.6.12",
+    "typescript": "^5.8.3",
+    "wxt": "0.20.7"
+  }
+}

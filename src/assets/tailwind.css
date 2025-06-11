@@ -1,0 +1,45 @@
+@layer theme, base, antd, components, utilities;
+@import "tailwindcss";
+body {
+  font-family: "Poppins";
+}
+@layer components {
+  body,
+  .min-ext-size {
+    @apply min-w-[380px];
+  }
+  .underline {
+    @apply rounded-sm font-medium text-gray-800 underline decoration-red-500 decoration-2 underline-offset-2 transition duration-100 hover:text-red-500 hover:decoration-red-500/30 focus:text-lime-500 focus:ring-lime-500/40 dark:text-white dark:decoration-lime-400 dark:hover:text-lime-400 dark:hover:decoration-lime-400/30 dark:focus:text-lime-400 dark:focus:ring-lime-400/40;
+  }
+  .ant-form-item {
+    @apply mb-2;
+  }
+  .ant-form-item-label {
+    @apply h-auto pb-0;
+  }
+  .flex-center {
+    @apply flex items-center justify-center gap-1;
+  }
+
+  /* Styles for Form Item with checkbox */
+  .item-flex {
+    @apply my-2 rounded-lg border border-gray-300 py-1.5 pr-1.5 pl-2;
+  }
+  .item-flex > div {
+    @apply flex w-full items-center justify-between;
+  }
+  .item-flex > div > div {
+    @apply flex-none;
+  }
+  .tags-select,
+  .item-flex {
+    @apply bg-white;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill-rule='evenodd'%3E%3Cg id='hexagons' fill='%23000000' fill-opacity='0.05' fill-rule='nonzero'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.98-7.5V0h-2v6.35L0 12.69v2.3zm0 18.5L12.98 41v8h-2v-6.85L0 35.81v-2.3zM15 0v7.5L27.99 15H28v-2.31h-.01L17 6.35V0h-2zm0 49v-8l12.99-7.5H28v2.31h-.01L17 42.15V49h-2z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+  .tags-select > div {
+    @apply w-full flex-col items-start;
+  }
+  .tags-select > div > div {
+    @apply w-full;
+  }
+}
