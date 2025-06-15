@@ -4,7 +4,7 @@
   "tagline": "by shady",
   "description": "This extension books amazon warehouse shift automatically.",
   "private": true,
-  "version": "0.0.3",
+  "version": "0.0.5",
   "type": "module",
   "scripts": {
     "dev": "wxt",

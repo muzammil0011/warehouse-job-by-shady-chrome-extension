@@ -178,15 +178,17 @@ const Tags: React.FC<TagsProps> = ({
     updateTags([]);
   };
   const handleResetCities = () => {
-    updateTags([
-      "Bolton",
-      "Brampton",
-      "Burnaby",
-      "Cambridge",
-      "Concord",
-      "Toronto",
-      "Sidney",
-    ]);
+    updateTags(
+      allowedCities || [
+        "Bolton",
+        "Brampton",
+        "Burnaby",
+        "Cambridge",
+        "Concord",
+        "Toronto",
+        "Sidney",
+      ],
+    );
   };
 
   return (

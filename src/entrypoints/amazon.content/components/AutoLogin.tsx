@@ -12,8 +12,10 @@ const AutoLogin: React.FC = () => {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
 
   useEffect(() => {
+    if (!settings) return;
+
     (async function () {
-      if (settings && settings.botStatus) {
+      if (settings.botStatus) {
         const { loginCountry, loginEmail, loginPin } = settings;
         if (!loginCountry || !loginEmail || !loginPin) setModalVisible(true);
 
@@ -45,22 +47,27 @@ const AutoLogin: React.FC = () => {
         }
 
         // Fill in login form
-        const loginInput = document.querySelector(
+        document.arrive(
           'input[data-test-id="input-test-id-login"]',
-        ) as HTMLInputElement;
-        if (loginInput && loginEmail) {
-          loginInput.value = loginEmail;
-          loginInput.dispatchEvent(new Event("input", { bubbles: true }));
+          { existing: true },
+          function (element) {
+            // Fill in PIN
+            const loginInput = element as HTMLInputElement;
+            if (loginInput && loginEmail) {
+              loginInput.value = loginEmail;
+              loginInput.dispatchEvent(new Event("input", { bubbles: true }));
 
-          const continueButtons = document.querySelectorAll(
-            'div[data-test-component="StencilReactRow"]',
-          );
-          continueButtons.forEach((button: Element) => {
-            if (button.textContent?.trim() === "Continue") {
-              (button as HTMLElement).click();
+              const continueButtons = document.querySelectorAll(
+                'div[data-test-component="StencilReactRow"]',
+              );
+              continueButtons.forEach((button: Element) => {
+                if (button.textContent?.trim() === "Continue") {
+                  (button as HTMLElement).click();
+                }
+              });
             }
-          });
-        }
+          },
+        );
 
         document.arrive(
           'input[data-test-id="input-test-id-pin"]',

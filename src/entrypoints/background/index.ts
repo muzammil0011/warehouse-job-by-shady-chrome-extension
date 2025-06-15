@@ -16,4 +16,21 @@ export default defineBackground(() => {
       }
     });
   });
+
+  chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (message.type === "queryTabs") {
+      chrome.tabs.query({}, (tabs) => {
+        const existingTab = tabs.find((tab) =>
+          tab.url?.includes(message.jobId),
+        );
+
+        if (existingTab) {
+          chrome.tabs.update(existingTab.id!, { active: true });
+        } else {
+          const jobDetailUrl = `https://hiring.amazon.ca/app#/jobDetail?jobId=${message.jobId}&locale=en-CA`;
+          chrome.tabs.create({ url: jobDetailUrl });
+        }
+      });
+    }
+  });
 });

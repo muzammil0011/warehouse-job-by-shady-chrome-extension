@@ -1,3 +1,5 @@
+import { cities } from "./constants";
+
 export default defineAppConfig({
   theme: {
     colorPrimary: "#ff6200",
@@ -10,17 +12,9 @@ export default defineAppConfig({
     lng: -79.383907,
     distance: "5",
     jobType: "Any",
-    cityTags: [
-      "Bolton",
-      "Brampton",
-      "Burnaby",
-      "Cambridge",
-      "Concord",
-      "Toronto",
-      "Sidney",
-    ],
-    maxInterval: 100,
-    minInterval: 200,
+    cityTags: cities,
+    minInterval: 100,
+    maxInterval: 200,
     randomInterval: 200,
     loginCountry: "Canada",
     loginEmail: null,
