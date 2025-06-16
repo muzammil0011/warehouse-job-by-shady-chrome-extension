@@ -1,71 +1,72 @@
 import "./autoShiftPicker.ts";
-// Handle job detail page interactions
 function handleJobDetailPage(): void {
-  const jobDetailObserver = new MutationObserver(
-    (mutations: MutationRecord[], observer: MutationObserver): void => {
-      const scheduleLink = document.querySelector(
-        'div[data-test-component="StencilText"] em',
-      ) as HTMLElement;
-      if (scheduleLink) {
-        scheduleLink.click();
-        observer.disconnect();
-        handleScheduleSelection();
-      }
-    },
-  );
+  let scheduleClicked = false;
+
+  const jobDetailObserver = new MutationObserver((_, observer): void => {
+    const scheduleLink = document.querySelector(
+      'div[data-test-component="StencilText"] em',
+    ) as HTMLElement;
+    if (scheduleLink && !scheduleClicked) {
+      scheduleClicked = true;
+      scheduleLink.click();
+      observer.disconnect();
+      handleScheduleSelection();
+    }
+  });
 
   jobDetailObserver.observe(document.body, {
     childList: true,
     subtree: true,
   });
 
-  // Fallback click after timeout
   setTimeout((): void => {
     const scheduleLink = document.querySelector(
       'div[data-test-component="StencilText"] em',
     ) as HTMLElement;
-    if (scheduleLink) {
+    if (scheduleLink && !scheduleClicked) {
+      scheduleClicked = true;
       scheduleLink.click();
       handleScheduleSelection();
     }
   }, 3000);
 }
 
-// Handle schedule selection
 function handleScheduleSelection(): void {
-  const scheduleObserver = new MutationObserver(
-    (mutations: MutationRecord[], observer: MutationObserver): void => {
-      const scheduleCards = document.querySelectorAll(".scheduleCardLabelText");
-      if (scheduleCards.length > 0) {
-        // Select random schedule
-        const randomIndex: number = Math.floor(
-          Math.random() * scheduleCards.length,
-        );
-        const selectedSchedule = scheduleCards[randomIndex] as HTMLElement;
-        selectedSchedule.click();
-        observer.disconnect();
-        if (scheduleInterval) {
-          clearInterval(scheduleInterval);
-        }
-        handleApplicationSubmission();
-      }
-    },
-  );
+  const clickedSchedules = new WeakSet<Element>();
+
+  const scheduleObserver = new MutationObserver((_, observer): void => {
+    const scheduleCards = document.querySelectorAll(".scheduleCardLabelText");
+    const unclicked = Array.from(scheduleCards).filter(
+      (el) => !clickedSchedules.has(el),
+    );
+    if (unclicked.length > 0) {
+      const selected = unclicked[
+        Math.floor(Math.random() * unclicked.length)
+      ] as HTMLElement;
+      clickedSchedules.add(selected);
+      selected.click();
+      observer.disconnect();
+      clearInterval(scheduleInterval);
+      handleApplicationSubmission();
+    }
+  });
 
   scheduleObserver.observe(document.body, {
     childList: true,
     subtree: true,
   });
 
-  // Fallback selection with interval
-  const scheduleInterval: NodeJS.Timeout = setInterval((): void => {
+  const scheduleInterval = setInterval((): void => {
     const scheduleCards = document.querySelectorAll(".scheduleCardLabelText");
-    if (scheduleCards.length > 0) {
-      const randomIndex: number = Math.floor(
-        Math.random() * scheduleCards.length,
-      );
-      const selectedSchedule = scheduleCards[randomIndex] as HTMLElement;
-      selectedSchedule.click();
+    const unclicked = Array.from(scheduleCards).filter(
+      (el) => !clickedSchedules.has(el),
+    );
+    if (unclicked.length > 0) {
+      const selected = unclicked[
+        Math.floor(Math.random() * unclicked.length)
+      ] as HTMLElement;
+      clickedSchedules.add(selected);
+      selected.click();
       scheduleObserver.disconnect();
       clearInterval(scheduleInterval);
       handleApplicationSubmission();
@@ -73,34 +74,32 @@ function handleScheduleSelection(): void {
   }, 1000);
 }
 
-// Handle final application submission
 function handleApplicationSubmission(): void {
-  const applyObserver = new MutationObserver(
-    (mutations: MutationRecord[], observer: MutationObserver): void => {
-      const applyButton = document.querySelector(
-        'button[data-test-id="jobDetailApplyButtonDesktop"]',
-      ) as HTMLElement;
-      if (applyButton) {
-        applyButton.click();
-        observer.disconnect();
-        if (applyInterval) {
-          clearInterval(applyInterval);
-        }
-      }
-    },
-  );
+  let applyClicked = false;
+
+  const applyObserver = new MutationObserver((_, observer): void => {
+    const applyButton = document.querySelector(
+      'button[data-test-id="jobDetailApplyButtonDesktop"]',
+    ) as HTMLElement;
+    if (applyButton && !applyClicked) {
+      applyClicked = true;
+      applyButton.click();
+      observer.disconnect();
+      clearInterval(applyInterval);
+    }
+  });
 
   applyObserver.observe(document.body, {
     childList: true,
     subtree: true,
   });
 
-  // Fallback application with interval
-  const applyInterval: NodeJS.Timeout = setInterval((): void => {
+  const applyInterval = setInterval((): void => {
     const applyButton = document.querySelector(
       'button[data-test-id="jobDetailApplyButtonDesktop"]',
     ) as HTMLElement;
-    if (applyButton) {
+    if (applyButton && !applyClicked) {
+      applyClicked = true;
       applyButton.click();
       applyObserver.disconnect();
       clearInterval(applyInterval);
@@ -115,6 +114,7 @@ export default defineContentScript({
     "use strict";
 
     let isRunning = true;
+    let buttonClicked = false;
 
     const log = (...messages: unknown[]) => {
       console.log("[Amazon Application Creation Auto-Clicker]", ...messages);
@@ -152,6 +152,7 @@ export default defineContentScript({
 
             if (!button.disabled && button.offsetParent !== null) {
               button.click();
+              buttonClicked = true;
               log("Button clicked! Stopping script.");
               isRunning = false;
               return true;
@@ -174,6 +175,11 @@ export default defineContentScript({
     const attemptClick = (): void => {
       if (!isRunning) {
         log("Script stopped.");
+        return;
+      }
+
+      if (buttonClicked) {
+        log("Button already clicked. Stopping attempts.");
         return;
       }
 

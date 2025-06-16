@@ -207,7 +207,7 @@ const JobSearch = () => {
 
         if (jobCards && jobCards.length > 0) {
           processFoundJobs(jobCards, settings, token);
-          stopJobSearch();
+          // stopJobSearch();
           notification.success({
             message: "Found a Job, now we will match city",
             description: `Found ${jobCards.length} job(s) matching your criteria.`,
@@ -272,11 +272,6 @@ const JobSearch = () => {
         btn.click();
         document.body.removeChild(btn);
       }
-
-      // stopJobSearch();
-
-      const jobDetailUrl = `https://hiring.amazon.ca/app#/jobDetail?jobId=${matchedJob.jobId}&locale=en-CA`;
-
       // 🧠 Check if tab is already open
       chrome.runtime.sendMessage({
         type: "queryTabs",
